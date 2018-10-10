@@ -1,10 +1,14 @@
 import UIKit
 
+extension Int {
+    var arc4random: Int {
+        return Int(arc4random_uniform(UInt32(self)))
+    }
+}
+
 class ViewController: UIViewController {
-    @IBOutlet weak var flipCountLabel: UILabel!
-    @IBOutlet var cardButtons: [UIButton]!
     
-    lazy var game = Concentration(numberOfPairsOfCards: numberOfPairsOfCards)
+    private lazy var game = Concentration(numberOfPairsOfCards: numberOfPairsOfCards)
     
     var numberOfPairsOfCards: Int {
         get {
@@ -12,17 +16,21 @@ class ViewController: UIViewController {
         }
     }
     
-    var emojiChoices = ["🌚", "✈️", "🏙", "🐓", "🐳", "🐙"]
+    @IBOutlet private weak var flipCountLabel: UILabel!
     
-    var emoji = [Int : String]()
+    @IBOutlet private var cardButtons: [UIButton]!
     
-    var flipCard = 0 {
+    private var emojiChoices = ["🌚", "✈️", "🏙", "🐓", "🐳", "🐙"]
+    
+    private var emoji = [Int : String]()
+    
+    private (set) var flipCard = 0 {
         didSet {
             flipCountLabel.text = String(flipCard)
         }
     }
     
-    @IBAction func touchCard(_ sender: UIButton) {
+    @IBAction private func touchCard(_ sender: UIButton) {
         flipCard += 1
         if let cardNumber = cardButtons.index(of: sender) {
             game.chooseCard(at: cardNumber)
@@ -30,15 +38,19 @@ class ViewController: UIViewController {
         }
     }
     
-    func emoji(for card : Card) -> String {
-        if emoji[card.identifier] == nil, emojiChoices.count > 0 {
-            let randomIndex = Int(arc4random_uniform(UInt32(emojiChoices.count)))
-            emoji[card.identifier] = emojiChoices.remove(at: randomIndex)
+    /**
+     Returns emoji that card contains. If card does not contain emoji, it get random emoji from emojiChoices.
+    */
+    private func emoji(for card : Card) -> String {
+        let cardId = card.identifier
+        let emojiCount = emojiChoices.count
+        if emoji[cardId] == nil, emojiCount > 0 {
+            emoji[cardId] = emojiChoices.remove(at: emojiCount.arc4random)
         }
         return emoji[card.identifier] ?? "?"
     }
     
-    func updateViewFromModel() {
+    private func updateViewFromModel() {
         for i in cardButtons.indices {
             let button = cardButtons[i]
             let card = game.cards[i]
