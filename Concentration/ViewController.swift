@@ -47,7 +47,7 @@ class ViewController: UIViewController {
         if emoji[cardId] == nil, emojiCount > 0 {
             emoji[cardId] = emojiChoices.remove(at: emojiCount.arc4random)
         }
-        return emoji[card.identifier] ?? "?"
+        return emoji[cardId] ?? "?"
     }
     
     private func updateViewFromModel() {
@@ -58,7 +58,7 @@ class ViewController: UIViewController {
                 button.setTitle(emoji(for: card), for: UIControlState.normal)
                 button.backgroundColor = #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1)
             } else {
-                button.setTitle("", for: UIControlState.normal)
+                button.setTitle(nil, for: UIControlState.normal)
                 button.backgroundColor = card.isMatched ? UIColor.clear : #colorLiteral(red: 0.2785325944, green: 0.399879247, blue: 1, alpha: 1)
             }
         }

@@ -11,7 +11,7 @@ struct Card {
     
     private static var identifierFactory = -1
     
-    private static func getUniqueIdentifier()->Int{
+    private static func getUniqueIdentifier() -> Int {
         identifierFactory += 1
         return identifierFactory
     }
