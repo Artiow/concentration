@@ -16,22 +16,29 @@ class ViewController: UIViewController {
         }
     }
     
+    @IBOutlet private var cardButtons: [UIButton]!
+    
     @IBOutlet private weak var flipCountLabel: UILabel!
     
-    @IBOutlet private var cardButtons: [UIButton]!
+    @IBOutlet private weak var scoreCountLabel: UILabel!
     
     private var emojiChoices = ["🌚", "✈️", "🏙", "🐓", "🐳", "🐙"]
     
-    private var emoji = [Int : String]()
+    private var emoji = [Card : String]()
     
-    private (set) var flipCard = 0 {
+    private (set) var flips = 0 {
         didSet {
-            flipCountLabel.text = String(flipCard)
+            flipCountLabel.text = String(flips)
+        }
+    }
+    
+    private (set) var score = 0 {
+        didSet {
+            scoreCountLabel.text = String(score)
         }
     }
     
     @IBAction private func touchCard(_ sender: UIButton) {
-        flipCard += 1
         if let cardNumber = cardButtons.index(of: sender) {
             game.chooseCard(at: cardNumber)
             updateViewFromModel()
@@ -42,23 +49,24 @@ class ViewController: UIViewController {
      Returns emoji that card contains. If card does not contain emoji, it get random emoji from emojiChoices.
     */
     private func emoji(for card : Card) -> String {
-        let cardId = card.identifier
         let emojiCount = emojiChoices.count
-        if emoji[cardId] == nil, emojiCount > 0 {
-            emoji[cardId] = emojiChoices.remove(at: emojiCount.arc4random)
+        if emoji[card] == nil, emojiCount > 0 {
+            emoji[card] = emojiChoices.remove(at: emojiCount.arc4random)
         }
-        return emoji[card.identifier] ?? "?"
+        return emoji[card] ?? "?"
     }
     
     private func updateViewFromModel() {
+        flips = game.flips
+        score = game.score
         for i in cardButtons.indices {
-            let button = cardButtons[i]
             let card = game.cards[i]
+            let button = cardButtons[i]
             if card.isFaceUp {
                 button.setTitle(emoji(for: card), for: UIControlState.normal)
                 button.backgroundColor = #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1)
             } else {
-                button.setTitle("", for: UIControlState.normal)
+                button.setTitle(nil, for: UIControlState.normal)
                 button.backgroundColor = card.isMatched ? UIColor.clear : #colorLiteral(red: 0.2785325944, green: 0.399879247, blue: 1, alpha: 1)
             }
         }
