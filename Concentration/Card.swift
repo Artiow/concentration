@@ -6,8 +6,6 @@ struct Card: Hashable {
     var isMatched = false
     private var identifier : Int
     
-    
-    // Артем пидор!!!
     var hashValue: Int {
         return identifier
     }
