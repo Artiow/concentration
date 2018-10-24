@@ -1,5 +1,11 @@
 import Foundation
 
+extension Collection {
+    var oneAndOnly: Element? {
+        return count == 1 ? first : nil
+    }
+}
+
 extension MutableCollection {
     mutating func shuffle() {
         let c = count
@@ -25,19 +31,25 @@ struct Concentration {
     
     private (set) var cards = [Card]()
     
+    private (set) var flips = 0
+    
+    private var _score = 0
+    private (set) var score: Int! {
+        get {
+            return _score
+        }
+        set (newValue) {
+            if newValue >= 0 {
+                _score = newValue
+            }
+        }
+    }
+    
     private var indexOfOneAndOnlyFaceUpCard: Int? {
         get{
-            var foundIndex: Int?
-            for index in cards.indices {
-                if cards[index].isFaceUp {
-                    if foundIndex == nil {
-                        foundIndex = index
-                    } else {
-                        return nil
-                    }
-                }
-            }
-            return foundIndex
+            return cards.indices.filter {
+                cards[$0].isFaceUp
+                }.oneAndOnly
         }
         set (newValue) {
             for index in cards.indices {
@@ -50,7 +62,7 @@ struct Concentration {
         assert((numberOfPairsOfCards > 0), "init(\(numberOfPairsOfCards)): you must have at least one pair of cards")
         for _ in 1...numberOfPairsOfCards {
             let card = Card()
-            cards += [card,card]
+            cards += [card, card]
         }
         cards.shuffle()
     }
@@ -58,16 +70,22 @@ struct Concentration {
     mutating func chooseCard(at index : Int) {
         assert(cards.indices.contains(index), "Concentration.chooseCard(at: \(index)): choosen index not in the cards")
         if !cards[index].isMatched {
-            if let mathIndex = indexOfOneAndOnlyFaceUpCard,
-                mathIndex != index {
-                if cards[mathIndex].identifier == cards[index].identifier {
+            flips = flips + 1
+            if let mathIndex = indexOfOneAndOnlyFaceUpCard, mathIndex != index {
+                cards[mathIndex].isFaceUp = false
+                if cards[mathIndex] != cards[index] {
+                    cards[index].isFaceUp = true
+                    score = score - 1
+                } else {
                     cards[mathIndex].isMatched = true
                     cards[index].isMatched = true
+                    score = score + 10
                 }
-                cards[index].isFaceUp = true
             } else {
                 indexOfOneAndOnlyFaceUpCard = index
+                score = score - 1
             }
         }
     }
 }
+
