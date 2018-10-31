@@ -69,7 +69,7 @@ struct Concentration {
     
     mutating func chooseCard(at index : Int) {
         assert(cards.indices.contains(index), "Concentration.chooseCard(at: \(index)): choosen index not in the cards")
-        if !cards[index].isMatched {
+        if !cards[index].isMatched, !cards[index].isFaceUp {
             flips = flips + 1
             if let mathIndex = indexOfOneAndOnlyFaceUpCard, mathIndex != index {
                 cards[mathIndex].isFaceUp = false
