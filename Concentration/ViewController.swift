@@ -22,6 +22,14 @@ class ViewController: UIViewController {
     
     @IBOutlet private weak var scoreCountLabel: UILabel!
     
+    @IBOutlet weak var newGameButton: UIView!
+    
+    @IBAction func newGameHandler(_ sender: UIButton) {
+        game.startNewGame(with: numberOfPairsOfCards)
+        emojiChoices = emojiThemes[emojiThemes.count.arc4random]
+        updateViewFromModel()
+    }
+    
     private var emojiThemes = [
         ["😄", "😁", "😆", "😅", "🤣", "😊", "🙂", "🙃", "😋", "🤨"],
         ["🐶", "🐱", "🐭", "🐹", "🐰", "🦊", "🐻", "🐼", "🐮", "🐷"],
@@ -33,6 +41,7 @@ class ViewController: UIViewController {
     private var emojiChoices = [String]()
     
     private var emoji = [Card : String]()
+    
     
     private (set) var flips = 0 {
         didSet {
@@ -51,7 +60,7 @@ class ViewController: UIViewController {
      Called if view did load.
      */
     override func viewDidLoad() {
-        emojiChoices = emojiThemes[0]
+        emojiChoices = emojiThemes[emojiThemes.count.arc4random]
         super.viewDidLoad()
     }
     

@@ -58,13 +58,25 @@ struct Concentration {
         }
     }
     
-    init(numberOfPairsOfCards : Int) {
+    mutating func startNewGame(with numberOfPairs: Int) {
+        cards = []
+        initCards(with: numberOfPairs)
+        flips = 0
+        score = 0
+    }
+    
+    mutating func initCards(with numberOfPairsOfCards : Int) {
         assert((numberOfPairsOfCards > 0), "init(\(numberOfPairsOfCards)): you must have at least one pair of cards")
         for _ in 1...numberOfPairsOfCards {
             let card = Card()
             cards += [card, card]
         }
         cards.shuffle()
+    }
+    
+    
+    init(numberOfPairsOfCards : Int) {
+        initCards(with: numberOfPairsOfCards)
     }
     
     mutating func chooseCard(at index : Int) {
