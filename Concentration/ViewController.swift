@@ -22,7 +22,15 @@ class ViewController: UIViewController {
     
     @IBOutlet private weak var scoreCountLabel: UILabel!
     
-    private var emojiChoices = ["🌚", "✈️", "🏙", "🐓", "🐳", "🐙"]
+    private var emojiThemes = [
+        ["😄", "😁", "😆", "😅", "🤣", "😊", "🙂", "🙃", "😋", "🤨"],
+        ["🐶", "🐱", "🐭", "🐹", "🐰", "🦊", "🐻", "🐼", "🐮", "🐷"],
+        ["🌗", "🌘", "🌚", "🌑", "🌒", "🌓", "🌔", "🌝", "🌕", "🌖"],
+        ["☀️", "🌤", "⛅️", "🌥", "☁️", "🌦", "🌧", "⛈", "🌩", "🌨"],
+        ["🍏", "🍎", "🍐", "🍊", "🍋", "🍓", "🍈", "🍑", "🍅", "🥔"]
+    ]
+    
+    private var emojiChoices = [String]()
     
     private var emoji = [Card : String]()
     
@@ -38,6 +46,18 @@ class ViewController: UIViewController {
         }
     }
     
+    
+    /**
+     Called if view did load.
+     */
+    override func viewDidLoad() {
+        emojiChoices = emojiThemes[0]
+        super.viewDidLoad()
+    }
+    
+    /**
+     Choose card and update view.
+     */
     @IBAction private func touchCard(_ sender: UIButton) {
         if let cardNumber = cardButtons.index(of: sender) {
             game.chooseCard(at: cardNumber)
@@ -56,6 +76,9 @@ class ViewController: UIViewController {
         return emoji[card] ?? "?"
     }
     
+    /**
+     View updater.
+     */
     private func updateViewFromModel() {
         flips = game.flips
         score = game.score
