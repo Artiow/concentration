@@ -30,7 +30,6 @@ class ViewController: UIViewController {
         updateViewFromModel()
     }
     
-    
     private var emojiThemes = [
         ["😄", "😁", "😆", "😅", "🤣", "😊", "🙂", "🙃", "😋", "🤨"],
         ["🐶", "🐱", "🐭", "🐹", "🐰", "🦊", "🐻", "🐼", "🐮", "🐷"],
@@ -43,6 +42,7 @@ class ViewController: UIViewController {
     
     private var emoji = [Card : String]()
     
+    
     private (set) var flips = 0 {
         didSet {
             flipCountLabel.text = String(flips)
@@ -54,6 +54,7 @@ class ViewController: UIViewController {
             scoreCountLabel.text = String(score)
         }
     }
+    
     
     /**
      Called if view did load.
@@ -84,6 +85,9 @@ class ViewController: UIViewController {
         return emoji[card] ?? "?"
     }
     
+    /**
+     View updater.
+     */
     private func updateViewFromModel() {
         flips = game.flips
         score = game.score

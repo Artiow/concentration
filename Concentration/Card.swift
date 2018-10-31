@@ -6,13 +6,6 @@ struct Card: Hashable {
     var isMatched = false
     private var identifier : Int
     
-    var hashValue: Int {
-        return identifier
-    }
-    
-    static func ==(lhs: Card, rhs: Card) -> Bool {
-        return lhs.identifier == rhs.identifier
-    }
     
     init() {
         self.identifier = Card.getUniqueIdentifier()
@@ -24,5 +17,14 @@ struct Card: Hashable {
     private static func getUniqueIdentifier() -> Int {
         identifierFactory += 1
         return identifierFactory
+    }
+    
+    
+    var hashValue: Int {
+        return identifier
+    }
+    
+    static func ==(lhs: Card, rhs: Card) -> Bool {
+        return lhs.identifier == rhs.identifier
     }
 }
